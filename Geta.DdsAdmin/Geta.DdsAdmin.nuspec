@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Geta.DdsAdmin</id>
+    <version>1.2.0</version>
+    <title>Geta.DdsAdmin</title>
+    <authors>Gatis Bergspics, Dzulqarnain Nasir, Valdis Iljuconoks</authors>
+    <owners>Geta AS</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Geta DDS(Dynamic Data Store) CRUD Admin module</description>
+    <copyright>Copyright © 2012 Geta AS</copyright>
+    <dependencies>
+      <dependency id="EPiServer.CMS.Core" version="6.1.379.0" />
+      <dependency id="EPiServer.Framework" version="6.2.267.1" />
+      <dependency id="jQuery" version="1.7.2" />
+      <dependency id="jquery.datatables" version="1.9.1" />
+      <dependency id="jQuery.UI.Combined" version="1.8.19" />
+      <dependency id="jQuery.Validation" version="1.9" />
+      <dependency id="log4net" version="2.0.0" />
+      <dependency id="Newtonsoft.Json" version="4.5.5" />
+      <dependency id="SquishIt" version="0.8.6" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="Admin\Data.ashx" target="content\modules\Geta.DdsAdmin\Admin\Data.ashx" />
+    <file src="Admin\DdsAdmin.aspx" target="content\modules\Geta.DdsAdmin\Admin\DdsAdmin.aspx" />
+    <file src="Admin\Default.aspx" target="content\modules\Geta.DdsAdmin\Admin\Default.aspx" />
+    <file src="Admin\Menu.aspx" target="content\modules\Geta.DdsAdmin\Admin\Menu.aspx" />
+    <file src="Scripts\listfilter.js" target="content\modules\Geta.DdsAdmin\Scripts\listfilter.js" />
+    <file src="FrameworkTemp.Master" target="content\modules\Geta.DdsAdmin\FrameworkTemp.Master" />
+    <file src="Temp.Master" target="content\modules\Geta.DdsAdmin\Temp.Master" />
+    <file src="Web.config" target="content\modules\Geta.DdsAdmin\Web.config" />
+    <file src="Scripts\DataTables-1.9.0\media\js\complete.js" target="content\Scripts\DataTables-1.9.1\media\js\complete.js" />
+    <file src="Scripts\DataTables-1.9.0\media\js\jquery.dataTables.editable.js" target="content\Scripts\DataTables-1.9.1\media\js\jquery.dataTables.editable.js" />
+    <file src="Scripts\DataTables-1.9.0\media\js\jquery.jeditable.js" target="content\Scripts\DataTables-1.9.1\media\js\jquery.jeditable.js" />
+    <file src="bin\Geta.DdsAdmin.dll" target="lib\Geta.DdsAdmin.dll" />
+  </files>
+</package>

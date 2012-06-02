@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>Geta.ErrorHandler</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>https://www.coderesort.com/p/epicode/wiki/errorhandler</projectUrl>
+    <description>$description$</description>
+    <tags>Error handling CMS6R2RTM</tags>
+    <dependencies>
+	    <dependency id="log4net" version="1.2.10" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="web.config.transform" target="content\web.config.transform" />
+  </files>
+</package>

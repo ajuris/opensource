@@ -1,0 +1,17 @@
+﻿<episerver xmlns="http://EPiServer.Configuration.EPiServerSection">
+    <virtualPath>
+        <providers>
+            <add showInFileManager="true"
+               virtualName="Amazon"
+               virtualPath="~/AmazonS3/"
+               bucketName="company-bucket-name"
+               bypassAccessCheck="true"
+               hostName="static.example.com"
+               maxVersions="5"
+               name="SiteAmazonS3"
+               type="Geta.AmazonS3.Hosting.AmazonS3VirtualPathProvider,Geta.AmazonS3"
+               awsAccessKey="accessKey"
+               awsSecretKey="secretKey" />
+        </providers>
+    </virtualPath>
+</episerver>

@@ -1,0 +1,17 @@
+<configuration>
+  <system.webServer>
+    <modules runAllManagedModulesForAllRequests="true">
+      <add name="CustomErrorHandlerModule" type="Geta.ErrorHandler.ErrorHandlerModule, Geta.ErrorHandler" />
+    </modules>
+    <httpErrors errorMode="Custom">
+      <remove statusCode="401" subStatusCode="-1"/>
+      <error statusCode="401" path="/CustomErrorHandler.aspx" prefixLanguageFilePath="" responseMode="ExecuteURL" />
+      <remove statusCode="403" subStatusCode="-1"/>
+      <error statusCode="403" path="/CustomErrorHandler.aspx" prefixLanguageFilePath="" responseMode="ExecuteURL" />
+      <remove statusCode="404" subStatusCode="-1"/>
+      <error statusCode="404" path="/CustomErrorHandler.aspx" prefixLanguageFilePath="" responseMode="ExecuteURL" />
+      <remove statusCode="500" subStatusCode="-1"/>
+      <error statusCode="500" path="/CustomErrorHandler.aspx" prefixLanguageFilePath="" responseMode="ExecuteURL" />
+    </httpErrors>
+  </system.webServer>
+</configuration>
