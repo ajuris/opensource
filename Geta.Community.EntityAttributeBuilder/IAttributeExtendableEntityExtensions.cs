@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using Castle.DynamicProxy;
 using EPiServer.Common.Attributes;
@@ -50,7 +52,29 @@ namespace Geta.Community.EntityAttributeBuilder
                 throw new InvalidOperationException("Could not extract member access expression from + " + expression);
             }
 
-            entity.SetAttributeValue(attributeName, value);
+            // check if value is list, if so - we need to find precise overloaded method to invoke
+            if (typeof (R).IsGenericList())
+            {
+                var methodInfo = entity.GetType().GetMethods()
+                    .Where(m => m.Name == "SetAttributeValue")
+                    .Select(r => new { M = r, P = r.GetParameters() })
+                    .Where(r => r.P[1].ParameterType.IsGenericType
+                                && r.P[1].ParameterType.GetGenericTypeDefinition() == typeof (IList<>))
+                    .Select(x => x.M).SingleOrDefault();
+
+                if (methodInfo == null)
+                {
+                    throw new InvalidOperationException("Something wrong with getting 'SetAttributeValue' method for type '" +
+                                                        entity.GetType().FullName + "'.");
+                }
+
+                var genericMethod = methodInfo.MakeGenericMethod(typeof(R).GetGenericArguments().First());
+                genericMethod.Invoke(entity, new object[] { attributeName, value });
+            }
+            else
+            {
+                entity.SetAttributeValue(attributeName, value);
+            }
         }
     }
 }

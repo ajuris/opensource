@@ -36,23 +36,23 @@
       <HintPath>packages\Castle.Core.3.0.0.4001\lib\net40-client\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="EPiServer, Version=6.1.379.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\References\EPiServer.dll</HintPath>
+      <HintPath>References\EPiServer.dll</HintPath>
     </Reference>
     <Reference Include="EPiServer.Common.Cache, Version=4.1.517.380, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\References\EPiServer.Common.Cache.dll</HintPath>
+      <HintPath>References\EPiServer.Common.Cache.dll</HintPath>
     </Reference>
     <Reference Include="EPiServer.Common.Framework, Version=4.1.517.380, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\References\EPiServer.Common.Framework.dll</HintPath>
+      <HintPath>References\EPiServer.Common.Framework.dll</HintPath>
     </Reference>
     <Reference Include="EPiServer.Common.Framework.Impl, Version=4.1.517.380, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\References\EPiServer.Common.Framework.Impl.dll</HintPath>
+      <HintPath>References\EPiServer.Common.Framework.Impl.dll</HintPath>
     </Reference>
     <Reference Include="EPiServer.Framework, Version=6.2.267.1, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\References\EPiServer.Framework.dll</HintPath>
+      <HintPath>References\EPiServer.Framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition">
-      <HintPath>..\References\System.ComponentModel.Composition.dll</HintPath>
+      <HintPath>References\System.ComponentModel.Composition.dll</HintPath>
     </Reference>
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -78,6 +78,7 @@
     <Compile Include="CommunityEntityMetadata.cs" />
     <Compile Include="CommunityEntityDefinition.cs" />
     <Compile Include="CommunityEntity.cs" />
+    <Compile Include="ReflectionHelper.cs" />
     <Compile Include="TypeAttributeHelper.cs" />
     <Compile Include="EntityAttributeSynchronizationModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -114,5 +114,10 @@ namespace Geta.Community.EntityAttributeBuilder
         {
             this.entity.SetAttributeValue(this.propertyName, (IList<T>) this.backingList);
         }
+
+        public override string ToString()
+        {
+            return "List of " + typeof (T).FullName + ", Count = " + Count;
+        }
     }
 }
