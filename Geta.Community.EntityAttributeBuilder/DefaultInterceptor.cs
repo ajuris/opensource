@@ -20,7 +20,7 @@ namespace Geta.Community.EntityAttributeBuilder
         {
             if (invocation.Method.Name.StartsWith("get_", StringComparison.InvariantCultureIgnoreCase))
             {
-                if (IsAttributeCollection(invocation.Method.ReturnType))
+                if (invocation.Method.ReturnType.IsGenericList())
                 {
                     ReturnCollectionValue(invocation);
                 }
@@ -35,7 +35,7 @@ namespace Geta.Community.EntityAttributeBuilder
             if (invocation.Method.Name.StartsWith("set_", StringComparison.InvariantCultureIgnoreCase))
             {
                 var type = invocation.Arguments[0].GetType();
-                if (IsAttributeCollection(type))
+                if (type.IsGenericList())
                 {
                     var methodInfo = Entity.GetType().GetMethods()
                         .Where(m => m.Name == "SetAttributeValue")
@@ -91,15 +91,6 @@ namespace Geta.Community.EntityAttributeBuilder
             {
                 invocation.ReturnValue = null;
             }
-        }
-
-        private bool IsAttributeCollection(Type type)
-        {
-            var collectionType = typeof (IList<>);
-
-            return type.IsGenericType
-                   && collectionType.IsAssignableFrom(type.GetGenericTypeDefinition())
-                   || type.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == collectionType);
         }
     }
 }
