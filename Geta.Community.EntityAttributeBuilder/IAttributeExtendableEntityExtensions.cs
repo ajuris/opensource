@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using Castle.DynamicProxy;
 using EPiServer.Common.Attributes;
 
@@ -11,7 +11,10 @@ namespace Geta.Community.EntityAttributeBuilder
     public static class IAttributeExtendableEntityExtensions
     {
         private static readonly ProxyGenerator gen = new ProxyGenerator();
-        private static readonly ConcurrentDictionary<string, object> cache = new ConcurrentDictionary<string, object>();
+        private static readonly ProxyGenerationOptions options = new ProxyGenerationOptions(new ProxyGenerationHook());
+
+        private static readonly ConditionalWeakTable<IAttributeExtendableEntity, object> table =
+            new ConditionalWeakTable<IAttributeExtendableEntity, object>();
 
         public static T AsAttributeExtendable<T>(this IAttributeExtendableEntity entity) where T : class, new()
         {
@@ -20,20 +23,19 @@ namespace Geta.Community.EntityAttributeBuilder
                 throw new ArgumentNullException("entity");
             }
 
-            var cacheKey = typeof(T).FullName;
-            if (string.IsNullOrEmpty(cacheKey))
+            object classProxyCached;
+
+            // try to find already created class proxy from the cache
+            // this is required to increase speed a bit and not to create new class proxy for the same class more than once
+            table.TryGetValue(entity, out classProxyCached);
+
+            if (classProxyCached == null)
             {
-                return GenerateClassProxy<T>(entity);
+                classProxyCached = GenerateClassProxy<T>(entity);
+                table.Add(entity, classProxyCached);
             }
 
-            if (cache.ContainsKey(cacheKey))
-            {
-                return cache[cacheKey] as T;
-            }
-
-            var classProxy = GenerateClassProxy<T>(entity);
-            cache.TryAdd(cacheKey, classProxy);
-            return classProxy;
+            return classProxyCached as T;
         }
 
         public static R GetAttributeValue<T, R>(this IAttributeExtendableEntity entity, Expression<Func<T, R>> expression)
@@ -45,6 +47,12 @@ namespace Geta.Community.EntityAttributeBuilder
 
             var helper = new ExpressionHelper();
             var attributeName = helper.ExtractMemberAccess(expression);
+
+            if (typeof(R).IsGenericList())
+            {
+                // TODO: add support for IList attributes
+            }
+
             return entity.GetAttributeValue<R>(attributeName);
         }
 
@@ -92,7 +100,6 @@ namespace Geta.Community.EntityAttributeBuilder
         private static T GenerateClassProxy<T>(IAttributeExtendableEntity entity) where T : class, new()
         {
             var interceptor = new DefaultInterceptor<T>(entity);
-            var options = new ProxyGenerationOptions(new ProxyGenerationHook());
             var proxy = gen.CreateClassProxy<T>(options, interceptor);
 
             return proxy;
