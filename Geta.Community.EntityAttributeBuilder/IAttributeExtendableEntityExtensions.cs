@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -9,6 +10,9 @@ namespace Geta.Community.EntityAttributeBuilder
 {
     public static class IAttributeExtendableEntityExtensions
     {
+        private static readonly ProxyGenerator gen = new ProxyGenerator();
+        private static readonly ConcurrentDictionary<string, object> cache = new ConcurrentDictionary<string, object>();
+
         public static T AsAttributeExtendable<T>(this IAttributeExtendableEntity entity) where T : class, new()
         {
             if (entity == null)
@@ -16,12 +20,20 @@ namespace Geta.Community.EntityAttributeBuilder
                 throw new ArgumentNullException("entity");
             }
 
-            var interceptor = new DefaultInterceptor<T>(entity);
-            var gen = new ProxyGenerator();
-            var options = new ProxyGenerationOptions(new ProxyGenerationHook());
+            var cacheKey = typeof(T).FullName;
+            if (string.IsNullOrEmpty(cacheKey))
+            {
+                return GenerateClassProxy<T>(entity);
+            }
 
-            var proxy = gen.CreateClassProxy<T>(options, interceptor);
-            return proxy;
+            if (cache.ContainsKey(cacheKey))
+            {
+                return cache[cacheKey] as T;
+            }
+
+            var classProxy = GenerateClassProxy<T>(entity);
+            cache.TryAdd(cacheKey, classProxy);
+            return classProxy;
         }
 
         public static R GetAttributeValue<T, R>(this IAttributeExtendableEntity entity, Expression<Func<T, R>> expression)
@@ -53,13 +65,13 @@ namespace Geta.Community.EntityAttributeBuilder
             }
 
             // check if value is list, if so - we need to find precise overloaded method to invoke
-            if (typeof (R).IsGenericList())
+            if (typeof(R).IsGenericList())
             {
                 var methodInfo = entity.GetType().GetMethods()
                     .Where(m => m.Name == "SetAttributeValue")
                     .Select(r => new { M = r, P = r.GetParameters() })
                     .Where(r => r.P[1].ParameterType.IsGenericType
-                                && r.P[1].ParameterType.GetGenericTypeDefinition() == typeof (IList<>))
+                                && r.P[1].ParameterType.GetGenericTypeDefinition() == typeof(IList<>))
                     .Select(x => x.M).SingleOrDefault();
 
                 if (methodInfo == null)
@@ -75,6 +87,15 @@ namespace Geta.Community.EntityAttributeBuilder
             {
                 entity.SetAttributeValue(attributeName, value);
             }
+        }
+
+        private static T GenerateClassProxy<T>(IAttributeExtendableEntity entity) where T : class, new()
+        {
+            var interceptor = new DefaultInterceptor<T>(entity);
+            var options = new ProxyGenerationOptions(new ProxyGenerationHook());
+            var proxy = gen.CreateClassProxy<T>(options, interceptor);
+
+            return proxy;
         }
     }
 }
